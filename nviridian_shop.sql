@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jul 13, 2025 at 10:57 AM
+-- Generation Time: Jul 21, 2025 at 12:51 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -74,6 +74,20 @@ DELIMITER ;
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `currencies`
+--
+
+CREATE TABLE `currencies` (
+  `currency_id` int(11) NOT NULL,
+  `currency_code` varchar(10) NOT NULL,
+  `symbol` varchar(5) NOT NULL,
+  `exchange_rate_to_usd` decimal(10,4) NOT NULL,
+  `last_updated` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `orders`
 --
 
@@ -84,6 +98,13 @@ CREATE TABLE `orders` (
   `currency` varchar(10) DEFAULT 'PHP',
   `created_at` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `orders`
+--
+
+INSERT INTO `orders` (`id`, `user_id`, `total`, `currency`, `created_at`) VALUES
+(7, 6, 54990.00, 'PHP', '2025-07-21 10:11:19');
 
 -- --------------------------------------------------------
 
@@ -109,7 +130,8 @@ INSERT INTO `order_items` (`id`, `order_id`, `product_id`, `quantity`, `price`) 
 (3, 3, 1, 1, 150000.00),
 (4, 4, 1, 4, 150000.00),
 (5, 5, 9, 1, 1809.00),
-(6, 5, 13, 2, 3000.00);
+(6, 5, 13, 2, 3000.00),
+(9, 7, 11, 1, 54990.00);
 
 -- --------------------------------------------------------
 
@@ -142,6 +164,21 @@ INSERT INTO `products` (`id`, `name`, `description`, `price`, `stock`, `image`) 
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `transaction_logs`
+--
+
+CREATE TABLE `transaction_logs` (
+  `id` int(11) NOT NULL,
+  `order_id` int(11) NOT NULL,
+  `payment_method` varchar(50) NOT NULL,
+  `status` enum('pending','completed','failed') DEFAULT 'pending',
+  `amount` decimal(10,2) NOT NULL,
+  `timestamp` timestamp NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `users`
 --
 
@@ -158,13 +195,22 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`id`, `name`, `email`, `password`, `role`) VALUES
-(1, 'francine lastimosa', 'lastimosarisch@gmail.com', '1234', 'admin'),
+(1, 'fronice lastimo', 'lastimosfronic@gmail.com', '1234', 'admin'),
 (2, 'Fritz Palumbarit', 'fritz@gmail.com', '1234', 'staff'),
-(3, 'hailee', 'haileesteinfeld@gmail.com', '1234', 'customer');
+(3, 'hailee', 'haileesteinfeld@gmail.com', '1234', 'customer'),
+(5, 'Amamiya ren', 'dree@gmail.com', '123456', 'customer'),
+(6, 'res ntt', 'yesnt@gmail.com', 'yesnt', 'staff');
 
 --
 -- Indexes for dumped tables
 --
+
+--
+-- Indexes for table `currencies`
+--
+ALTER TABLE `currencies`
+  ADD PRIMARY KEY (`currency_id`),
+  ADD UNIQUE KEY `currency_code` (`currency_code`);
 
 --
 -- Indexes for table `orders`
@@ -185,6 +231,13 @@ ALTER TABLE `products`
   ADD PRIMARY KEY (`id`);
 
 --
+-- Indexes for table `transaction_logs`
+--
+ALTER TABLE `transaction_logs`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `order_id` (`order_id`);
+
+--
 -- Indexes for table `users`
 --
 ALTER TABLE `users`
@@ -196,16 +249,22 @@ ALTER TABLE `users`
 --
 
 --
+-- AUTO_INCREMENT for table `currencies`
+--
+ALTER TABLE `currencies`
+  MODIFY `currency_id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
 -- AUTO_INCREMENT for table `orders`
 --
 ALTER TABLE `orders`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT for table `order_items`
 --
 ALTER TABLE `order_items`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
 --
 -- AUTO_INCREMENT for table `products`
@@ -214,10 +273,26 @@ ALTER TABLE `products`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
 
 --
+-- AUTO_INCREMENT for table `transaction_logs`
+--
+ALTER TABLE `transaction_logs`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+
+--
+-- Constraints for dumped tables
+--
+
+--
+-- Constraints for table `transaction_logs`
+--
+ALTER TABLE `transaction_logs`
+  ADD CONSTRAINT `transaction_logs_ibfk_1` FOREIGN KEY (`order_id`) REFERENCES `orders` (`id`);
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
