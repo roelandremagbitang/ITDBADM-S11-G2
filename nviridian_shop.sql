@@ -195,10 +195,10 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`id`, `name`, `email`, `password`, `role`) VALUES
-(1, 'fronice lastimo', 'lastimosfronic@gmail.com', '1234', 'admin'),
+(1, 'francine lastimosa', 'lastimosarisch@gmail.com', '1234', 'admin'),
 (2, 'Fritz Palumbarit', 'fritz@gmail.com', '1234', 'staff'),
 (3, 'hailee', 'haileesteinfeld@gmail.com', '1234', 'customer'),
-(5, 'Amamiya ren', 'dree@gmail.com', '123456', 'customer'),
+(5, 'Andre magbitang', 'dree@gmail.com', '123456', 'customer'),
 (6, 'res ntt', 'yesnt@gmail.com', 'yesnt', 'staff');
 
 --
