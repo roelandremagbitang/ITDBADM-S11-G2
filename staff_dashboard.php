@@ -143,9 +143,11 @@ $role = htmlspecialchars($user['role']);
 
     <main>
         <div class="card">
-            <h2 style="font-size: 1.5rem; font-weight: 600;">Navigations</h2>
+            <h2 style="font-size: 1.5rem; font-weight: 600;">Staff Navigations</h2>
             <div class="actions">
-                <a href="products.php" class="btn">📦 Browse products</a>
+                <a href="products.php" class="btn">📦 Browse Products</a>
+                <a href="products_management.php" class="btn">🛠️ Manage Products</a>
+                <a href="order_history.php" class="btn">📋 View Orders</a>
                 <a href="reports.php" class="btn">📊 View Reports</a>
                 <a href="logout.php" class="btn logout-btn">🚪 Logout</a>
             </div>
