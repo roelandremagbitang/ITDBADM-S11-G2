@@ -2,7 +2,7 @@
 $host = 'localhost';
 $db = 'nviridian_shop';
 $user = 'root';
-$pass = 'p@ssword';
+$pass = '';
 
 try {
     $pdo = new PDO("mysql:host=$host;dbname=$db", $user, $pass);
