@@ -12,7 +12,7 @@ $stmt = $pdo->prepare("SELECT name, role FROM users WHERE id = ?");
 $stmt->execute([$user_id]);
 $user = $stmt->fetch(PDO::FETCH_ASSOC);
 
-if (!$user || $user['role'] !== 'admin') {
+if (!$user || !in_array($user['role'], ['admin', 'staff'])) {
     header('Location: login.php');
     exit;
 }
