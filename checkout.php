@@ -37,9 +37,10 @@ try {
     // =================================================================
     // TRANSACTION WITH ACID PROPERTIES - START
     // =================================================================
-    $pdo->beginTransaction();
+    $pdo->beginTransaction(); // ATOMICITY: All operations below are part of a single transaction
     
     // Fetch product details with row locking (FOR UPDATE ensures ACID isolation)
+    // ISOLATION: FOR UPDATE locks rows to prevent concurrent modifications
     $placeholders = implode(',', array_fill(0, count($cart), '?'));
     $stmt = $pdo->prepare("SELECT id, name, price, stock FROM products WHERE id IN ($placeholders) FOR UPDATE");
     $stmt->execute(array_keys($cart));
@@ -51,6 +52,7 @@ try {
         
         // Check if sufficient stock is available
         if ($product['stock'] < $required_quantity) {
+            // CONSISTENCY: Prevents invalid state (negative stock)
             throw new Exception("Insufficient stock for product: {$product['name']}. Available: {$product['stock']}, Required: {$required_quantity}");
         }
         
@@ -78,6 +80,7 @@ try {
             'checkout_system'
         ]);
     } catch (Exception $log_error) {
+        // DURABILITY: Even if logging fails, main transaction continues
         // Continue even if logging fails
     }
     
